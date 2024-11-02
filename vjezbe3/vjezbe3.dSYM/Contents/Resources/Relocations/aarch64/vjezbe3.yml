@@ -1,0 +1,21 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/quomod0/Desktop/git - SP/StrukturePodataka/vjezbe3/vjezbe3'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003330, symSize: 0x218 }
+  - { offsetInCU: 0x9E, offset: 0x9E, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003330, symSize: 0x218 }
+  - { offsetInCU: 0xD4, offset: 0xD4, size: 0x8, addend: 0x0, symName: _PrependList, symObjAddr: 0x218, symBinAddr: 0x100003548, symSize: 0x84 }
+  - { offsetInCU: 0x134, offset: 0x134, size: 0x8, addend: 0x0, symName: _PrintList, symObjAddr: 0x29C, symBinAddr: 0x1000035CC, symSize: 0x94 }
+  - { offsetInCU: 0x16A, offset: 0x16A, size: 0x8, addend: 0x0, symName: _AddAfter, symObjAddr: 0x330, symBinAddr: 0x100003660, symSize: 0x60 }
+  - { offsetInCU: 0x1E6, offset: 0x1E6, size: 0x8, addend: 0x0, symName: _AddBefore, symObjAddr: 0x390, symBinAddr: 0x1000036C0, symSize: 0x60 }
+  - { offsetInCU: 0x262, offset: 0x262, size: 0x8, addend: 0x0, symName: _SortBySurname, symObjAddr: 0x3F0, symBinAddr: 0x100003720, symSize: 0x104 }
+  - { offsetInCU: 0x2C2, offset: 0x2C2, size: 0x8, addend: 0x0, symName: _CopyToFile, symObjAddr: 0x4F4, symBinAddr: 0x100003824, symSize: 0x110 }
+  - { offsetInCU: 0x306, offset: 0x306, size: 0x8, addend: 0x0, symName: _ReadFromFile, symObjAddr: 0x604, symBinAddr: 0x100003934, symSize: 0xEC }
+  - { offsetInCU: 0x378, offset: 0x378, size: 0x8, addend: 0x0, symName: _CreatePerson, symObjAddr: 0x6F0, symBinAddr: 0x100003A20, symSize: 0xA8 }
+  - { offsetInCU: 0x3CA, offset: 0x3CA, size: 0x8, addend: 0x0, symName: _InsertAfter, symObjAddr: 0x798, symBinAddr: 0x100003AC8, symSize: 0x34 }
+  - { offsetInCU: 0x400, offset: 0x400, size: 0x8, addend: 0x0, symName: _AppendList, symObjAddr: 0x7CC, symBinAddr: 0x100003AFC, symSize: 0x94 }
+  - { offsetInCU: 0x46E, offset: 0x46E, size: 0x8, addend: 0x0, symName: _FindLast, symObjAddr: 0x860, symBinAddr: 0x100003B90, symSize: 0x4C }
+  - { offsetInCU: 0x4A4, offset: 0x4A4, size: 0x8, addend: 0x0, symName: _FindBySurname, symObjAddr: 0x8AC, symBinAddr: 0x100003BDC, symSize: 0x8C }
+  - { offsetInCU: 0x4E8, offset: 0x4E8, size: 0x8, addend: 0x0, symName: _findPrevious, symObjAddr: 0x938, symBinAddr: 0x100003C68, symSize: 0x94 }
+  - { offsetInCU: 0x52C, offset: 0x52C, size: 0x8, addend: 0x0, symName: _Delete, symObjAddr: 0x9CC, symBinAddr: 0x100003CFC, symSize: 0x58 }
+...

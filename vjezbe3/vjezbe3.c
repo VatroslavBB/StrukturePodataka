@@ -7,10 +7,10 @@
 #define MAX_SIZE 50
 #define ERROR -1
 
-struct _struct;
-typedef struct _struct* position;
+struct person;
+typedef struct person* position;
 
-typedef struct _struct{
+typedef struct person{
     char name[MAX_SIZE];
     char lastName[MAX_SIZE];
     int birthYear;
@@ -43,7 +43,7 @@ int SortBySurname(position first);
 
 int CopyToFile(position first);
 
-int ReadFromFile(position first);
+int ReadFromFile(FILE* file);
 
 int main(){
     Person head = {
@@ -53,23 +53,43 @@ int main(){
         .next = NULL
     };
 
-    //dio pod a)
-    PrependList(&head, "Ivan", "Ivic", 1983);
-
-    //dio pod b)
+    PrependList(&head, "Ivana", "Ivic", 1983);
+    PrependList(&head, "Mate", "Matic", 2001);
+    PrependList(&head, "Jure", "Juric", 1995);
+    PrependList(&head, "Marta", "Martic", 1987);
+    PrependList(&head, "Josko", "Jolic", 2002);
+    printf("initial list\n");
     PrintList(head.next);
 
+    //dio pod a)
+    AddAfter(&head, "Martic", "Ante", "Antic", 1985);
+    printf("\ndio pod a) je izvrsen\n");
+    PrintList(head.next);
+
+    //dio pod b)
+    AddBefore(&head, "Martic", "Lucija", "Lucijevic", 1997);
+    printf("\ndio pod b) je izvrsen\n");
+    PrintList(head.next);
+    
     //dio pod c)
-    AppendList(&head, "Ana", "Anic", 2001);
+    SortBySurname(&head);
+    printf("\ndio pod c) je izvrsen\n");
     PrintList(head.next);
 
     //dio pod d)
-    FindBySurname(head.next, "Anic");
+    CopyToFile(head.next);
+    printf("\ndio pod d) je izvrsen\n");
 
     //dio pod e)
-    Delete(&head, "Ivan");
-    PrintList(head.next);
-
+    FILE* file = NULL;
+    file = fopen("InputListe.txt", "r");
+    if(file == NULL){
+        printf("Nije bilo moguce otvorit file");
+        return ERROR;
+    }
+    ReadFromFile(file);
+    printf("\ndio pod e) je izvrsen\n");
+    fclose(file);
     return 0;
 }
 
@@ -151,17 +171,18 @@ position FindBySurname(position first, char *surname){
     return NULL;
 }
 
-position findPrevious(position head, char* name){
+position findPrevious(position head, char* surname){
     position current = NULL;
     current = head;
     while(current->next != NULL){
-        if(strcmp((current->next)->name, name) == 0) return current;
+        if(strcmp((current->next)->lastName, surname) == 0) return current;
+        current = current->next;
     }
     return NULL;
 }
 
-int Delete(position head, char* name){
-    position previous = findPrevious(head, name);
+int Delete(position head, char* surname){
+    position previous = findPrevious(head, surname);
     position current = previous->next;
     previous->next = current->next;
     free(current);
@@ -176,20 +197,21 @@ int AddAfter(position head, char* surname, char* newName, char* newSurname, int 
 }
 
 int AddBefore(position head, char* surname, char* newName, char* newSurname, int newBY){
-    position newPerson = CreatePerson(newName, newSurname, newBY);
-    position temp = findPrevious(head, surname);
-    InsertAfter(temp, newPerson);
+    position NewPerson = CreatePerson(newName, newSurname, newBY);
+    position previous = findPrevious(head, surname);
+    InsertAfter(previous, NewPerson);
     return EXIT_SUCCESS;
 }
 
-int SortBySurname(position first){
-    position temp, i, iPrev, end = NULL;
+int SortBySurname(position head){
+    position temp, i, iPrev, end;
+    end = NULL;
 
-    while(first->next){
-        iPrev = first;
-        i = first->next;
+    while(head->next != end){
+        iPrev = head;
+        i = head->next;
         while(i->next != end){
-            if(strcmp(i->lastName, i->next->lastName) == -1){
+            if(strcmp(i->lastName, (i->next)->lastName) == 1){
                 temp = i->next;
                 iPrev->next = temp;
                 i->next = temp->next;
@@ -201,6 +223,7 @@ int SortBySurname(position first){
         }
         end = i;
     }
+    return EXIT_SUCCESS;
 }
 
 int CopyToFile(position first){
@@ -216,15 +239,15 @@ int CopyToFile(position first){
     }
     position temp = NULL;
     temp = first;
-    while(temp == NULL){
-        fprintf(file, "");
+    while(temp != NULL){
+        fprintf(file, "%s %s %d\n", temp->name, temp->lastName, temp->birthYear);
         temp = temp->next;
     }
     fclose(file);
     return EXIT_SUCCESS;
 }
 
-int ReadFromFile(position first){
+int ReadFromFile(FILE* file){
 
     Person newHead = {
         .name = {0},
@@ -233,19 +256,9 @@ int ReadFromFile(position first){
         .next = NULL
     };
 
-    char* buff = "", currName, currSurname;
+    char* buff, currName, currSurname;
     int currBy;
 
-    if(first == NULL){
-        printf("Lista je prazna, nema nista za upisat");
-        return EXIT_FAILURE;
-    }
-    FILE* file = NULL;
-    file = fopen("InputListe.txt", "r");
-    if(file == NULL){
-        printf("Nije bilo moguce otvorit file");
-        return ERROR;
-    }
     while(!feof(file)){
         fscanf(file, "%s", buff);
         sscanf(buff, "%s %s %d", currName, currSurname, currBy);
