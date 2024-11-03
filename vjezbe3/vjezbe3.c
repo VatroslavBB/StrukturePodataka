@@ -43,7 +43,7 @@ int SortBySurname(position first);
 
 int CopyToFile(position first);
 
-int ReadFromFile(FILE* file);
+int ReadFromFile(FILE* file, position head);
 
 int main(){
     Person head = {
@@ -81,16 +81,22 @@ int main(){
     printf("\ndio pod d) je izvrsen\n");
 
     //dio pod e)
+    Person NewHead = {
+        .name = {0},
+        .lastName = {0},
+        .birthYear = 0,
+        .next = NULL
+    };
     FILE* file = NULL;
     file = fopen("InputListe.txt", "r");
     if(file == NULL){
         printf("Nije bilo moguce otvorit file");
         return ERROR;
     }
-    ReadFromFile(file);
+    ReadFromFile(file, &NewHead);
     printf("\ndio pod e) je izvrsen\n");
     fclose(file);
-    return 0;
+    PrintList(NewHead.next);
 }
 
 
@@ -203,25 +209,25 @@ int AddBefore(position head, char* surname, char* newName, char* newSurname, int
     return EXIT_SUCCESS;
 }
 
-int SortBySurname(position head){
-    position temp, i, iPrev, end;
+int SortBySurname(position  head){
+    position j, prev_j, temp, end;
     end = NULL;
 
-    while(head->next != end){
-        iPrev = head;
-        i = head->next;
-        while(i->next != end){
-            if(strcmp(i->lastName, (i->next)->lastName) == 1){
-                temp = i->next;
-                iPrev->next = temp;
-                i->next = temp->next;
-                temp->next = i;
-                i = temp;
+    while(head->next != end) {
+        prev_j = head;
+        j = head->next;
+        while(j->next != end) {
+            if(strcmp(j->lastName, (j->next)->lastName) > 0) {
+                temp = j->next;
+                prev_j->next = temp;
+                j->next = temp->next;
+                temp->next = j;
+                j = temp;
             }
-            iPrev = i;
-            i = i->next;
+            prev_j = j;
+            j = j->next;
         }
-        end = i;
+        end = j;
     }
     return EXIT_SUCCESS;
 }
@@ -229,7 +235,7 @@ int SortBySurname(position head){
 int CopyToFile(position first){
     if(first == NULL){
         printf("Lista je prazna, nema nista za upisat");
-        return EXIT_FAILURE;
+        return ERROR;
     }
     FILE* file = NULL;
     file = fopen("InputListe.txt", "w");
@@ -247,7 +253,7 @@ int CopyToFile(position first){
     return EXIT_SUCCESS;
 }
 
-int ReadFromFile(FILE* file){
+int ReadFromFile(FILE* file, position head){
 
     Person newHead = {
         .name = {0},
@@ -256,15 +262,21 @@ int ReadFromFile(FILE* file){
         .next = NULL
     };
 
-    char* buff, currName, currSurname;
-    int currBy;
+    char buff[100];
 
-    while(!feof(file)){
-        fscanf(file, "%s", buff);
-        sscanf(buff, "%s %s %d", currName, currSurname, currBy);
-        AppendList(&newHead, currName, currSurname, currBy);
+    while(fgets(buff, sizeof(buff), file)){
+        char name[MAX_SIZE], surname[MAX_SIZE];
+        int by;
+        if(sscanf(buff, "%s %s %d", name, surname, &by) != 3){
+            printf("nije moguce ucitati podatke iz datoteke");
+            return ERROR;
+        }
+        else{
+            AppendList(head, name, surname, by);
+        }
     }
 
     return EXIT_SUCCESS;
 }
+ 
 
