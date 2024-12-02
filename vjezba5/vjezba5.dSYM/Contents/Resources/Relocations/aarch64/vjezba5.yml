@@ -1,0 +1,12 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/quomod0/Desktop/git - SP/StrukturePodataka/vjezba5/vjezba5'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x1000039F4, symSize: 0xAC }
+  - { offsetInCU: 0x7A, offset: 0x7A, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x1000039F4, symSize: 0xAC }
+  - { offsetInCU: 0xBE, offset: 0xBE, size: 0x8, addend: 0x0, symName: _CalculatePostfix, symObjAddr: 0xAC, symBinAddr: 0x100003AA0, symSize: 0x294 }
+  - { offsetInCU: 0x195, offset: 0x195, size: 0x8, addend: 0x0, symName: _findlast, symObjAddr: 0x340, symBinAddr: 0x100003D34, symSize: 0x4C }
+  - { offsetInCU: 0x1CB, offset: 0x1CB, size: 0x8, addend: 0x0, symName: _TopInt, symObjAddr: 0x38C, symBinAddr: 0x100003D80, symSize: 0x28 }
+  - { offsetInCU: 0x1F3, offset: 0x1F3, size: 0x8, addend: 0x0, symName: _PopInt, symObjAddr: 0x3B4, symBinAddr: 0x100003DA8, symSize: 0x78 }
+  - { offsetInCU: 0x237, offset: 0x237, size: 0x8, addend: 0x0, symName: _PushInt, symObjAddr: 0x42C, symBinAddr: 0x100003E20, symSize: 0xD4 }
+...

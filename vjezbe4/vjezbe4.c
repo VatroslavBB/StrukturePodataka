@@ -60,17 +60,33 @@ int main(){
         .exp = 0,
         .next = NULL
     };
-
-    printf("Enter polynomial terms for head1:\n");
-    InputPoly(&head1);
-    PrintPoly(head1.next);
+    
 
     FILE* file = NULL;
     file = fopen("polinom.txt", "r");
+    if(file == NULL){
+        printf("nije bilo moguce otvorit file\n");
+        return ERROR;
+    }
     ReadFromFile(file, &head2);
     PrintPoly(head2.next);
-
     fclose(file);
+
+    file = NULL;
+    file = fopen("polinom2.txt", "r");
+    if(file == NULL){
+        printf("nije bilo moguce otvorit file\n");
+        return ERROR;
+    }
+    ReadFromFile(file, &head1);
+    PrintPoly(head1.next);
+    fclose(file);
+
+    SumPoly(&head1, &head2, &headSum);
+    PrintPoly(headSum.next);
+
+    MultiplyPoly(&head1, &head2, &headMult);
+    PrintPoly(headMult.next);
 
     return EXIT_SUCCESS;
 }
@@ -128,9 +144,10 @@ int ReadFromFile(FILE* file, position head){
     char line[MAX_SIZE];
     while(fgets(line, sizeof(line), file)){
         char* ptr = line;
-        while(sscanf(ptr, "%d %d%n", &c, &e, &bytes) == 2){
+        while(sscanf(ptr, " %d %d %n", &c, &e, &bytes) == 2){
             SortedInput(head, CreateElement(c, e));
             ptr += bytes;
+            
         }
     }
     return EXIT_SUCCESS;
@@ -170,8 +187,8 @@ int SumPoly(position head1, position head2, position headSum){
 
 int MultiplyPoly(position head1, position head2, position headMul){
     position i = NULL, j = NULL;
-    i = head1;
-    j = head2;
+    i = head1->next;
+    j = head2->next;
     if(i == NULL){
         printf("polinom1 nepostoji\n");
         return EXIT_SUCCESS;
@@ -180,15 +197,16 @@ int MultiplyPoly(position head1, position head2, position headMul){
         printf("polinom2 nepostoji\n");
         return EXIT_SUCCESS;
     }
-    while(i->next){
-        while(j->next){
+    while(i){
+        while(j){
             int k = 1, e = 0;
-
+            k = i->coeff * j->coeff;
             e = i->exp + j->exp;
             position temp = CreateElement(k, e);
             SortedInput(headMul, temp);
             j = j->next;
         }
+        j = head2->next;
         i = i->next;
     }
     return EXIT_SUCCESS;
@@ -202,7 +220,7 @@ int PrintPoly(position first){
         return ERROR;
     }
     printf("Polinom: ");
-    while(temp->next){
+    while(temp){
         printf("%dx^%d + ", temp->coeff, temp->exp);
         temp = temp->next;
     }
