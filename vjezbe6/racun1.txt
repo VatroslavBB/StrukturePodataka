@@ -1,0 +1,6 @@
+2024-12-18
+jabuka 2 0.99
+kivi 1 1.5
+banana 5 0.88
+mrkva 3 1.09
+jabuka 3 0.99

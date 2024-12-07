@@ -1,0 +1,5 @@
+2022-04-10
+jogurt 3 1.71
+jabuka 2 0.99
+banana 4 0.88
+banana 6 0.88
