@@ -41,7 +41,7 @@ typedef struct receipt* ReceiptPosition;
 
 typedef struct receipt{
     DateTime date;
-    ArticlePosition ArticleHead;
+    Article ArticleHead;
     ReceiptPosition next;
 }Receipt;
 
@@ -54,50 +54,36 @@ int InsertAfterReceipt(ReceiptPosition previous, ReceiptPosition newReceipt);
 int ReadReceipts(ReceiptPosition first, FILE* file);
 int SortedInputReceipt(ReceiptPosition head, ReceiptPosition new);
 int PrintReceipts(ReceiptPosition first);
-int MergeReceipts(ReceiptPosition r1, ReceiptPosition r2);
 int ReadReceipts(ReceiptPosition head, FILE* file);
-int DeleteReceipts(ReceiptPosition first);
+int DeleteReceipts(ReceiptPosition head);
 int PrintReceipts(ReceiptPosition first);
+int MergeReceipts(ReceiptPosition r1, ReceiptPosition r2);
 
 ArticlePosition CreateArticle(char* name, int quantity, float price);
 int InsertAfterArticle(ArticlePosition previous, ArticlePosition new);
 int SortedInputArticle(ArticlePosition head, ArticlePosition new);
-int DeleteArticles(ArticlePosition first);
+int DeleteArticles(ArticlePosition head);
 int PrintArticles(ArticlePosition first);
-
-
-
-
-
-
-
 
 int main(){
     Receipt ReceiptHead = {
         .date = NULL_DATE,
         .next = NULL,
-        .ArticleHead = &NULL_ART
+        .ArticleHead = {
+            .name = {0},
+            .next = NULL,
+            .quantity = 0,
+            .price = 0.0
+        }
     };
-
     FILE* file = NULL;
     file = fopen("racuni.txt", "r");
-
     ReadReceipts(&ReceiptHead, file);
-
     PrintReceipts(ReceiptHead.next);
-
-    printf("\noashfoashdf\n");
-
     fclose(file);
+    DeleteReceipts(&ReceiptHead);
     return 0;
 }
-
-
-
-
-
-
-
 
 int CompareDates(DateTime d1, DateTime d2){
     if(d1.year > d2.year){
@@ -141,7 +127,7 @@ int PrintReceipts(ReceiptPosition first){
     while(temp){
         printf("\nRacun%d.txt: \n", i);
         PrintDateTime(temp->date);
-        PrintArticles(temp->ArticleHead->next);
+        PrintArticles(temp->ArticleHead.next);
         i++;
         temp = temp->next;
     }
@@ -169,7 +155,7 @@ ReceiptPosition CreateReceipt(DateTime d){
     }
     new->date = d;
     new->next = NULL;
-    new->ArticleHead = &NULL_ART;
+    new->ArticleHead = NULL_ART;
     
     return new;
 }
@@ -219,11 +205,10 @@ int ReadReceipts(ReceiptPosition head, FILE* file){
         ReceiptPosition newReceipt = NULL;
         newReceipt = CreateReceipt(SetDate(year, month, day));
         while(fscanf(receipt, "%s %d %f", name, &qnt, &price) == 3){
-            SortedInputArticle(newReceipt->ArticleHead, CreateArticle(name, qnt, price));
+            SortedInputArticle(&newReceipt->ArticleHead, CreateArticle(name, qnt, price));
         }
         SortedInputReceipt(head, newReceipt);
         fclose(receipt);
-        free(newReceipt);
     }
     return EXIT_SUCCESS;
 }
@@ -231,16 +216,14 @@ int ReadReceipts(ReceiptPosition head, FILE* file){
 int SortedInputReceipt(ReceiptPosition head, ReceiptPosition new){
     ReceiptPosition temp = NULL;
     temp = head;
-    int state = 7;
+    int OnHead = 1;
     while(temp->next){
-        state = CompareDates(new->date, temp->date);
-        if(state != DATE_LATER){
-            if(state == DATE_EQ){
-                MergeReceipts(temp, new);
-            }
-            else{
-                InsertAfterReceipt(temp, new);
-            }
+        if(CompareDates(temp->date, new->date) == DATE_EQ){
+            MergeReceipts(temp, new);
+            return EXIT_SUCCESS;
+        }
+        else if(CompareDates(temp->next->date, new->date) == DATE_LATER){
+            InsertAfterReceipt(temp, new);
             return EXIT_SUCCESS;
         }
         temp = temp->next;
@@ -258,6 +241,10 @@ int SortedInputArticle(ArticlePosition head, ArticlePosition new){
             free(new);
             return EXIT_SUCCESS;
         }
+        else if(strcmp(temp->next->name, new->name) > 0){
+            InsertAfterArticle(temp, new);
+            return EXIT_SUCCESS;
+        }
         temp = temp->next;
     }
     InsertAfterArticle(temp, new);
@@ -265,14 +252,34 @@ int SortedInputArticle(ArticlePosition head, ArticlePosition new){
 }
 
 int MergeReceipts(ReceiptPosition r1, ReceiptPosition r2){
-    ArticlePosition head = NULL, ToCopy = NULL;
-    head = r1->ArticleHead;
-    ToCopy = r2->ArticleHead->next;
-    while(ToCopy){
-        SortedInputArticle(head, ToCopy);
-        ToCopy = ToCopy->next;
+    ArticlePosition temp = NULL;
+    temp = r2->ArticleHead.next;
+    while(temp){
+        SortedInputArticle(&r1->ArticleHead, CreateArticle(temp->name, temp->quantity, temp->price));
+        temp = temp->next;
     }
     free(r2);
+    return EXIT_SUCCESS;
+}
+
+int DeleteReceipts(ReceiptPosition head){
+    ReceiptPosition temp = NULL;
+    while(head->next){
+        temp = head->next;
+        head->next = temp->next;
+        DeleteArticles(&temp->ArticleHead);
+        free(temp);
+    }
+    return EXIT_SUCCESS;
+}
+
+int DeleteArticles(ArticlePosition head){
+    ArticlePosition temp = NULL;
+    while(head->next){
+        temp = head->next;
+        head->next = temp->next;
+        free(temp);
+    }
     return EXIT_SUCCESS;
 }
 
