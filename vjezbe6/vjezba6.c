@@ -9,6 +9,23 @@
 #define DATE_LATER 1
 #define DATE_EARLIER -1
 
+int test(){
+    printf("\nstiglo do ovde\n");
+    return EXIT_SUCCESS;
+}
+
+typedef struct registered *RegisteredPosition;
+
+typedef struct registered{
+    char name[MAX_SIZE];
+    RegisteredPosition next;
+}Registered;
+
+Registered RegisteredHead = {
+    .name = {0},
+    .next = NULL
+};
+
 typedef struct datetime{
     int year;
     int month;
@@ -65,6 +82,12 @@ int SortedInputArticle(ArticlePosition head, ArticlePosition new);
 int DeleteArticles(ArticlePosition head);
 int PrintArticles(ArticlePosition first);
 
+int question(ReceiptPosition head);
+int PrintRegistered(RegisteredPosition first);
+RegisteredPosition CreateRegistered(char* name);
+int SortedInputRegistered(RegisteredPosition head, RegisteredPosition new);
+int InsertAfterRegistered(RegisteredPosition prev, RegisteredPosition new);
+
 int main(){
     Receipt ReceiptHead = {
         .date = NULL_DATE,
@@ -79,8 +102,11 @@ int main(){
     FILE* file = NULL;
     file = fopen("racuni.txt", "r");
     ReadReceipts(&ReceiptHead, file);
-    PrintReceipts(ReceiptHead.next);
+    //PrintReceipts(ReceiptHead.next);
     fclose(file);
+
+    question(&ReceiptHead);
+
     DeleteReceipts(&ReceiptHead);
     return 0;
 }
@@ -116,7 +142,7 @@ DateTime SetDate(int year, int month, int day){
 }
 
 int PrintDateTime(DateTime d){
-    printf("%d.%d.%d\n", d.day, d.month, d.year);
+    printf("%d.%d.%d", d.day, d.month, d.year);
     return EXIT_SUCCESS;
 }
 
@@ -186,6 +212,12 @@ int InsertAfterArticle(ArticlePosition previous, ArticlePosition new){
     return EXIT_SUCCESS;
 }
 
+int InsertAfterRegistered(RegisteredPosition prev, RegisteredPosition new){
+    new->next = prev->next;
+    prev->next = new;
+    return EXIT_SUCCESS;
+}
+
 int ReadReceipts(ReceiptPosition head, FILE* file){
     FILE* receipt = NULL;
     if(file == NULL){
@@ -206,6 +238,7 @@ int ReadReceipts(ReceiptPosition head, FILE* file){
         newReceipt = CreateReceipt(SetDate(year, month, day));
         while(fscanf(receipt, "%s %d %f", name, &qnt, &price) == 3){
             SortedInputArticle(&newReceipt->ArticleHead, CreateArticle(name, qnt, price));
+            SortedInputRegistered(&RegisteredHead, CreateRegistered(name));
         }
         SortedInputReceipt(head, newReceipt);
         fclose(receipt);
@@ -228,6 +261,10 @@ int SortedInputReceipt(ReceiptPosition head, ReceiptPosition new){
         }
         temp = temp->next;
     }
+    if(CompareDates(temp->date, new->date) == DATE_EQ){
+        MergeReceipts(temp, new);
+        return EXIT_SUCCESS;
+    }
     InsertAfterReceipt(temp, new);
     return EXIT_SUCCESS;
 }
@@ -247,7 +284,32 @@ int SortedInputArticle(ArticlePosition head, ArticlePosition new){
         }
         temp = temp->next;
     }
+    if(strcmp(temp->name, new->name) == 0){
+        temp->quantity += new->quantity;
+        free(new);
+        return EXIT_SUCCESS;
+    }
     InsertAfterArticle(temp, new);
+    return EXIT_SUCCESS;
+}
+
+int SortedInputRegistered(RegisteredPosition head, RegisteredPosition new){
+    RegisteredPosition temp = NULL;
+    temp = head;
+    while(temp->next){
+        if(strcmp(temp->name, new->name) == 0){
+            return EXIT_SUCCESS;
+        }
+        else if(strcmp(temp->next->name, new->name) > 0){
+            InsertAfterRegistered(temp, new);
+            return EXIT_SUCCESS;
+        }
+        temp = temp->next;
+    }
+    if(strcmp(temp->name, new->name) != 0){
+            InsertAfterRegistered(temp, new);
+            return EXIT_SUCCESS;
+        }
     return EXIT_SUCCESS;
 }
 
@@ -282,4 +344,87 @@ int DeleteArticles(ArticlePosition head){
     }
     return EXIT_SUCCESS;
 }
+
+int question(ReceiptPosition head){
+    printf("Kupljeni artikli:\n");
+    int max = PrintRegistered(RegisteredHead.next) + 1;
+    printf("\nUnesite broj od 1 do %d za unos imena artikla:\n", max);
+
+    int art = 0;
+    scanf("%d", &art);
+    while(!(art > 0 && art < max+1)){
+        printf("\nNiste unijeli odgovarajucu vrijednost, molimo pokusajte ponovo\n");
+        scanf("%d", &art);
+    }
+    DateTime d1 = NULL_DATE, d2 = NULL_DATE;
+    int y = 0, m = 0, d = 0;
+    printf("Sada unesite dva datuma:\nPrvi Datum:\n");
+    scanf("%d.%d.%d.", &d, &m, &y);
+    d1 = SetDate(y, m, d);
+    printf("Drugi datum:\n");
+    scanf("%d.%d.%d.", &d, &m, &y);
+    d2 = SetDate(y, m, d);
+    while(CompareDates(d1, d2) != DATE_EARLIER){
+        printf("Niste unijeli kronoloski ispravne datume, molimo pokusajte ponovo.\n");
+        printf("Prvi Datum:\n");
+        scanf("%d.%d.%d.", &d, &m, &y);
+        d1 = SetDate(y, m, d);
+        printf("Drugi datum:\n");
+        scanf("%d.%d.%d.", &d, &m, &y);
+        d2 = SetDate(y, m, d);
+    }
+    RegisteredPosition InputedArticle = NULL;   
+    InputedArticle = RegisteredHead.next;
+    while(art > 1){
+
+        InputedArticle = InputedArticle->next;
+        art--;
+    }
+    ReceiptPosition temp = NULL;
+    temp = head->next;
+    int bought = 0;
+    float cost = 0.0;
+    while(temp && (CompareDates(temp->date, d1) != DATE_EARLIER) && (CompareDates(temp->date, d2) != DATE_LATER)){
+        ArticlePosition tempArt = NULL;
+        tempArt = &temp->ArticleHead;
+        while(tempArt->next && strcmp(tempArt->name, InputedArticle->name) != 0){
+            tempArt = tempArt->next;
+        }
+        bought += (strcmp(tempArt->name, InputedArticle->name) == 0)*(tempArt->quantity);
+        cost += (strcmp(tempArt->name, InputedArticle->name) == 0)*(tempArt->price)*bought;
+        temp = temp->next;
+    }
+    printf("Artikl %s je u vremenskom razdoblju od ", InputedArticle->name);
+    PrintDateTime(d1);
+    printf(" do ");
+    PrintDateTime(d2);
+    printf(" kupljen %d puta i to je kostalo %.3f\n", bought, cost);
+
+    return EXIT_SUCCESS;
+}
+
+int PrintRegistered(RegisteredPosition first){
+    RegisteredPosition temp = NULL;
+    temp = first;
+    int i = 0;
+    while(temp){
+        printf("%d.%s\n", i+1, temp->name);
+        temp = temp->next;
+        i++;
+    }
+    return i;
+}
+
+RegisteredPosition CreateRegistered(char* name){
+    RegisteredPosition new = NULL;
+    new = (RegisteredPosition)malloc(sizeof(Registered));
+    if(new == NULL){
+        printf("Nije bilo mjesta za biljezenje postojeceg artikla.\n");
+        return NULL;
+    }
+    strcpy(new->name, name);
+    new->next = NULL;
+    return new;
+}
+
 
