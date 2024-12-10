@@ -102,7 +102,7 @@ int main(){
     FILE* file = NULL;
     file = fopen("racuni.txt", "r");
     ReadReceipts(&ReceiptHead, file);
-    //PrintReceipts(ReceiptHead.next);
+    PrintReceipts(ReceiptHead.next);
     fclose(file);
 
     question(&ReceiptHead);
@@ -249,7 +249,6 @@ int ReadReceipts(ReceiptPosition head, FILE* file){
 int SortedInputReceipt(ReceiptPosition head, ReceiptPosition new){
     ReceiptPosition temp = NULL;
     temp = head;
-    int OnHead = 1;
     while(temp->next){
         if(CompareDates(temp->date, new->date) == DATE_EQ){
             MergeReceipts(temp, new);
