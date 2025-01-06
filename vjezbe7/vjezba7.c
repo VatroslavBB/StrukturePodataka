@@ -33,7 +33,6 @@ DirectoryPosition CreateDir(char* name);
 int LinkDir(DirectoryPosition newDir);
 int ReturnToPrev();
 int PrintDir(DirectoryPosition dir, int depth);
-int PrintDirEl(char* name);
 int ChangeDir(char* name);
 int solution();
 
@@ -49,7 +48,7 @@ DirectoryPosition CreateDir(char* name){
     DirectoryPosition newDir = NULL;
     newDir = (DirectoryPosition)malloc(sizeof(Directory));
     if(newDir == NULL){
-        printf("Nije bilo mjesta za stvaranje novog direktorija.\n");
+        printf("\nNije bilo mjesta za stvaranje novog direktorija.\n");
         return NULL;
     }
     strcpy(newDir->name, name);
@@ -77,7 +76,7 @@ int LinkDir(DirectoryPosition newDir){
 
 int ReturnToPrev(){
     if(current->parent == NULL){
-        printf("Vracanje na prethodni direktorij nije moguce.\n");
+        printf("\nVracanje na prethodni direktorij nije moguce.\n");
         return EXIT_FAILURE;
     }
     current = current->parent;
@@ -91,35 +90,24 @@ int PrintDir(DirectoryPosition dir, int depth){
         for(int i = 0; i < depth; i++){
             printf("\t");
         }
-        PrintDirEl(temp->name);
+        printf("|--> %s\n", temp->name);
         PrintDir(temp, depth + 1);
         temp = temp->next;
     }
     return EXIT_SUCCESS;
 }
 
-int PrintDirEl(char* name){
-    printf("|--> %s\n", name);
-    return EXIT_SUCCESS;
-}
-
 int ChangeDir(char* name){
     DirectoryPosition temp = NULL;
-    if(current->child == NULL){
-        return EXIT_SUCCESS;
-    }
-    else{
-        temp = current->child;
-    }
+    temp = current->child;
     while(temp){
         if(strcmp(temp->name, name) == 0){
             current = temp;
-            PrintDirEl(current->name);
             return EXIT_SUCCESS;
         }
         temp = temp->next;
     }
-    printf("Taj direktorij nepostoji.\n");
+    printf("\nTaj direktorij nepostoji.\n");
     return EXIT_FAILURE;
 }
 
@@ -132,7 +120,7 @@ int solution(){
     while(quit == 0){
         if(wrongChoice == 1){
             wrongChoice = 0;
-            printf("Ta naredba nepostoji, pokušajte ponovo.\n");
+            printf("\nTa naredba nepostoji, pokušajte ponovo.\n");
         }
         printf("Odaberite jednu od sljedecih naredbi:\n");
         printf("1 - md\n");
@@ -155,7 +143,7 @@ int solution(){
             ReturnToPrev();
         }
         else if(strcmp(choice, "dir") == 0){
-            PrintDirEl(current->name);
+            printf("%s\n", current->name);
             PrintDir(current, 1);
         }
         else if(strcmp(choice, "quit") == 0){
@@ -167,4 +155,7 @@ int solution(){
     }
     return EXIT_SUCCESS;
 }
+
+
+
 

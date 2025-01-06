@@ -1,0 +1,22 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/quomod0/Desktop/git - SP/StrukturePodataka/vjezbe8/vjezbe8'
+relocations:
+  - { offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003558, symSize: 0xE0 }
+  - { offset: 0xB6, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003558, symSize: 0xE0 }
+  - { offset: 0x108, size: 0x8, addend: 0x0, symName: _CreateNode, symObjAddr: 0xE0, symBinAddr: 0x100003638, symSize: 0x80 }
+  - { offset: 0x13E, size: 0x8, addend: 0x0, symName: _LinkToTree, symObjAddr: 0x160, symBinAddr: 0x1000036B8, symSize: 0x158 }
+  - { offset: 0x174, size: 0x8, addend: 0x0, symName: _DeleteNode, symObjAddr: 0x2B8, symBinAddr: 0x100003810, symSize: 0x1B8 }
+  - { offset: 0x1E3, size: 0x8, addend: 0x0, symName: _DeleteTree, symObjAddr: 0x470, symBinAddr: 0x1000039C8, symSize: 0x64 }
+  - { offset: 0x20B, size: 0x8, addend: 0x0, symName: _CreateQnode, symObjAddr: 0x4D4, symBinAddr: 0x100003A2C, symSize: 0x78 }
+  - { offset: 0x241, size: 0x8, addend: 0x0, symName: _Pop, symObjAddr: 0x54C, symBinAddr: 0x100003AA4, symSize: 0x14 }
+  - { offset: 0x269, size: 0x8, addend: 0x0, symName: _Push, symObjAddr: 0x560, symBinAddr: 0x100003AB8, symSize: 0x18 }
+  - { offset: 0x29F, size: 0x8, addend: 0x0, symName: _Qdelete, symObjAddr: 0x578, symBinAddr: 0x100003AD0, symSize: 0x14 }
+  - { offset: 0x2C7, size: 0x8, addend: 0x0, symName: _InOrder, symObjAddr: 0x58C, symBinAddr: 0x100003AE4, symSize: 0x7C }
+  - { offset: 0x2EF, size: 0x8, addend: 0x0, symName: _PostOrder, symObjAddr: 0x608, symBinAddr: 0x100003B60, symSize: 0x7C }
+  - { offset: 0x317, size: 0x8, addend: 0x0, symName: _PreOrder, symObjAddr: 0x684, symBinAddr: 0x100003BDC, symSize: 0x7C }
+  - { offset: 0x33F, size: 0x8, addend: 0x0, symName: _LevelOrder, symObjAddr: 0x700, symBinAddr: 0x100003C58, symSize: 0x14 }
+  - { offset: 0x367, size: 0x8, addend: 0x0, symName: _FindNode, symObjAddr: 0x714, symBinAddr: 0x100003C6C, symSize: 0xB4 }
+  - { offset: 0x39D, size: 0x8, addend: 0x0, symName: _FindPrev, symObjAddr: 0x7C8, symBinAddr: 0x100003D20, symSize: 0x14C }
+  - { offset: 0x3E1, size: 0x8, addend: 0x0, symName: _FindMin, symObjAddr: 0x914, symBinAddr: 0x100003E6C, symSize: 0x4C }
+...
