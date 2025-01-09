@@ -5,8 +5,8 @@ unošenje novog elementa .
 inorder .
 preorder .
 postorder .
-level order
-brisanje
+level order x
+brisanje .
 pronalaženje nekog elementa . 
 */
 
@@ -30,8 +30,8 @@ typedef struct qnode{
 }Qnode;
 
 Qposition CreateQnode(position tNode);
-Qposition Pop(Qposition head);
-Qposition Push(Qposition head, position tNode);
+position Pop(Qposition head);
+position Push(Qposition head, position tNode);
 int Qdelete(Qposition head);
 
 position CreateNode(int val);
@@ -56,28 +56,32 @@ int main(){
         LinkToTree(root, CreateNode(arr[i]));
     }
 
-    /* InOrder(root);
+    InOrder(root);
     printf("\n");
     PostOrder(root);
     printf("\n");
     PreOrder(root);
-    printf("\n"); */
+    printf("\n");
+    LevelOrder(root);
+    printf("\n");
 
     /* position found = NULL;
-    for(int i = 0; i < 10; i++){
-        found = FindNode(root, i);
+    for(int i = -15; i < 45; i++){
+        found = FindPrev(root, FindNode(root, i));
         if(found){
-            printf("Vrijednost %d je upisana u stablo na adresi %p\n", i, found);
+            printf("Prethodnik od %d je %d\n", i, found->value);
         }
         else{
             printf("Vrijednost %d NIJE upisana u stablo\n", i);
         }
     } */
 
-    DeleteNode(root, 2);
+    /* printf("%p\n", FindNode(root, -7));
+    DeleteNode(root, -7);
+    printf("%p\n", FindNode(root, -7)); */
 
 
-    DeleteTree(root);
+    //DeleteTree(root);
 
     return EXIT_SUCCESS;
 
@@ -95,15 +99,39 @@ Qposition CreateQnode(position tNode){
     return new;
 }
 
-Qposition Pop(Qposition head){
-    return NULL;
+position Pop(Qposition head){
+    if(head == NULL){
+        return NULL;
+    }
+    else if(head->next == NULL){
+        return NULL;
+    }
+    Qposition poped = NULL;
+    poped = head->next;
+    position tnode = poped->treeNode;
+    head->next = poped->next;
+    free(poped);
+    return tnode;
 }
 
-Qposition Push(Qposition head, position tNode){
-    return NULL;
+position Push(Qposition head, position tNode){
+    Qposition temp = NULL;
+    temp = head;
+    while(temp->next){
+        temp = temp->next;
+    }
+    Qposition new = CreateQnode(tNode);
+    temp->next = new;
+    new->next = NULL;
+    return tNode;
 }
 
 int Qdelete(Qposition head){
+    while(head){
+        Qposition temp = head;
+        head = head->next;
+        free(temp);
+    }
     return 0;
 }
 
@@ -182,7 +210,25 @@ int PreOrder(position root){
 }
 
 int LevelOrder(position root){
-    return EXIT_FAILURE;
+    if(root == NULL){
+        return EXIT_SUCCESS;
+    }
+    Qnode qHead = {
+        .next = NULL,
+        .treeNode = NULL
+    };
+    Push(&qHead, root);
+    while(qHead.next != NULL){
+        position current = Pop(&qHead);
+        printf("%d ", current->value);
+        if(current->left != NULL){
+            Push(&qHead, current->left);
+        }
+        if(current->right != NULL){
+            Push(&qHead, current->right);
+        }
+    }
+    return EXIT_SUCCESS;
 }
 
 int DeleteTree(position root){
@@ -211,27 +257,17 @@ position FindNode(position root, int val){
 }
 
 position FindPrev(position root, position current){
-    position prev = NULL;
-    if(root == NULL){
+    if(root == NULL || current == NULL){
         return NULL;
     }
-    if(root->left){
-        if(root->left == current){
-            return root;
-        }
+    if(root->left == current || root->right == current){
+        return root;
     }
-    if(root->right){
-        if(root->right == current){
-            return root;
-        }
+    else if(current->value > root->value){
+        return FindPrev(root->right, current);
     }
-    prev = FindPrev(root->left, current);
-    if(prev->left == current){
-        return prev;
-    }
-    prev = FindPrev(root->right, current);
-    if(prev->right == current){
-        return prev;
+    else if(current->value < root->value){
+        return FindPrev(root->left, current);
     }
 }
 
@@ -270,9 +306,9 @@ int DeleteNode(position root, int val){
         free(toDelete);
         return EXIT_SUCCESS;
     }
-    int min = FindMin(toDelete->right)->value;
-    DeleteNode(root, min);
-    toDelete->value = min;
+    position min = FindMin(toDelete->right);
+    DeleteNode(root, min->value);
+    toDelete->value = min->value;
 }
 
 position FindMin(position root){
