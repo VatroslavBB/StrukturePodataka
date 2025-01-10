@@ -14,7 +14,6 @@ pronalaženje nekog elementa .
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 typedef struct node* position;
 typedef struct node{

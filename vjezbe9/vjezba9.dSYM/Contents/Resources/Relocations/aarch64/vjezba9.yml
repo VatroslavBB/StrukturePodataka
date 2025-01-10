@@ -1,0 +1,19 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/quomod0/Desktop/git - SP/StrukturePodataka/vjezbe9/vjezba9'
+relocations:
+  - { offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003624, symSize: 0x120 }
+  - { offset: 0xB7, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003624, symSize: 0x120 }
+  - { offset: 0x109, size: 0x8, addend: 0x0, symName: _insertA, symObjAddr: 0x120, symBinAddr: 0x100003744, symSize: 0x94 }
+  - { offset: 0x169, size: 0x8, addend: 0x0, symName: _inorderWrite, symObjAddr: 0x1B4, symBinAddr: 0x1000037D8, symSize: 0x8C }
+  - { offset: 0x19F, size: 0x8, addend: 0x0, symName: _replace, symObjAddr: 0x240, symBinAddr: 0x100003864, symSize: 0xEC }
+  - { offset: 0x1E3, size: 0x8, addend: 0x0, symName: _DeleteTree, symObjAddr: 0x32C, symBinAddr: 0x100003950, symSize: 0x64 }
+  - { offset: 0x20B, size: 0x8, addend: 0x0, symName: _CreateNode, symObjAddr: 0x390, symBinAddr: 0x1000039B4, symSize: 0x80 }
+  - { offset: 0x241, size: 0x8, addend: 0x0, symName: _LinkNode, symObjAddr: 0x410, symBinAddr: 0x100003A34, symSize: 0xCC }
+  - { offset: 0x277, size: 0x8, addend: 0x0, symName: _insertB, symObjAddr: 0x4DC, symBinAddr: 0x100003B00, symSize: 0xAC }
+  - { offset: 0x2C9, size: 0x8, addend: 0x0, symName: _Push, symObjAddr: 0x588, symBinAddr: 0x100003BAC, symSize: 0x7C }
+  - { offset: 0x31B, size: 0x8, addend: 0x0, symName: _Pop, symObjAddr: 0x604, symBinAddr: 0x100003C28, symSize: 0xA0 }
+  - { offset: 0x35F, size: 0x8, addend: 0x0, symName: _sum, symObjAddr: 0x6A4, symBinAddr: 0x100003CC8, symSize: 0x108 }
+  - { offset: 0x3B1, size: 0x8, addend: 0x0, symName: _CreateQnode, symObjAddr: 0x7AC, symBinAddr: 0x100003DD0, symSize: 0x78 }
+  - { offset: 0x3E7, size: 0x8, addend: 0x0, symName: _Qdelete, symObjAddr: 0x824, symBinAddr: 0x100003E48, symSize: 0x58 }
+...
