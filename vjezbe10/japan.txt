@@ -1,0 +1,7 @@
+Tokyo, 8400000
+Sapporo, 1900000
+Chiba, 900000
+Fukuoka, 1400000
+Osaka, 2500000
+Yokohama, 3500000
+Kyoto, 1500000

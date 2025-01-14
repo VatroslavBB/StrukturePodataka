@@ -40,10 +40,10 @@ int main(){
     position root = NULL;
 
     //pod a)
-    root = insertA(root, arr, len);
+    //root = insertA(root, arr, len);
 
     //pod b)
-    //root = insertB(root, 30);
+    root = insertB(root, 30);
 
     FILE* file = NULL;
     file = fopen("zad9.txt", "w");

@@ -1,0 +1,8 @@
+Hrvatska hrvatska.txt
+Francuska francuska.txt
+Njemacka njemacka.txt
+Japan japan.txt
+Kina kina.txt
+Kanada kanada.txt
+Meksiko meksiko.txt
+Zimbabwe zimbabwe.txt

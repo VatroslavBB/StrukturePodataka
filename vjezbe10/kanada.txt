@@ -1,0 +1,6 @@
+Vancouver, 600000
+Quebec, 500000
+Ottawa, 800000
+Montreal, 1600000
+Toronto, 2600000
+Calgary, 1000000

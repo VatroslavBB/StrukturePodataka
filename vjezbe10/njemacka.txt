@@ -1,0 +1,7 @@
+Berlin, 3400000
+Koeln, 960000
+Leipzig, 500000
+Dresden, 480000
+Munich, 1200000
+Essen, 590000
+Hamburg, 1700000

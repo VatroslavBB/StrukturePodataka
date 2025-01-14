@@ -1,0 +1,6 @@
+Hangzhou, 6200000
+Beijing, 11700000
+Guangzhou, 11000000
+Shanghai, 22300000
+Wuhan, 9700000
+Shenzhen, 10300000

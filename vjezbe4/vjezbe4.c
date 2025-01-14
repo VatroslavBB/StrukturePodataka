@@ -147,7 +147,6 @@ int ReadFromFile(FILE* file, position head){
         while(sscanf(ptr, " %d %d %n", &c, &e, &bytes) == 2){
             SortedInput(head, CreateElement(c, e));
             ptr += bytes;
-            
         }
     }
     return EXIT_SUCCESS;

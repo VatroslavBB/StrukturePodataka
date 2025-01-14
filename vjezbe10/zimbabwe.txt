@@ -1,0 +1,6 @@
+Harare, 1500000
+Mutare, 180000
+Zvishavane, 35000
+Ruwa, 30000
+Epworth, 120000
+Kwekwe, 100000
