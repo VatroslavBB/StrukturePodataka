@@ -1,0 +1,19 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/quomod0/Desktop/git - SP/StrukturePodataka/vjezbe10/vj10a'
+relocations:
+  - { offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x1000032B0, symSize: 0x168 }
+  - { offset: 0xE6, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x1000032B0, symSize: 0x168 }
+  - { offset: 0x155, size: 0x8, addend: 0x0, symName: _ReadFromFile, symObjAddr: 0x168, symBinAddr: 0x100003418, symSize: 0x1E8 }
+  - { offset: 0x246, size: 0x8, addend: 0x0, symName: _PrintCountries, symObjAddr: 0x350, symBinAddr: 0x100003600, symSize: 0x84 }
+  - { offset: 0x27C, size: 0x8, addend: 0x0, symName: _FindCountry, symObjAddr: 0x3D4, symBinAddr: 0x100003684, symSize: 0x88 }
+  - { offset: 0x2C0, size: 0x8, addend: 0x0, symName: _PrintBiggerThan, symObjAddr: 0x45C, symBinAddr: 0x10000370C, symSize: 0xA0 }
+  - { offset: 0x2F6, size: 0x8, addend: 0x0, symName: _InorderPrint, symObjAddr: 0x4FC, symBinAddr: 0x1000037AC, symSize: 0x74 }
+  - { offset: 0x31E, size: 0x8, addend: 0x0, symName: _CreateCity, symObjAddr: 0x570, symBinAddr: 0x100003820, symSize: 0x94 }
+  - { offset: 0x362, size: 0x8, addend: 0x0, symName: _CreateCountry, symObjAddr: 0x604, symBinAddr: 0x1000038B4, symSize: 0xE4 }
+  - { offset: 0x3A6, size: 0x8, addend: 0x0, symName: _LinkCity, symObjAddr: 0x6E8, symBinAddr: 0x100003998, symSize: 0x1E0 }
+  - { offset: 0x3DC, size: 0x8, addend: 0x0, symName: _LinkCountry, symObjAddr: 0x8C8, symBinAddr: 0x100003B78, symSize: 0x114 }
+  - { offset: 0x420, size: 0x8, addend: 0x0, symName: _InorderLinkCities, symObjAddr: 0x9DC, symBinAddr: 0x100003C8C, symSize: 0x74 }
+  - { offset: 0x456, size: 0x8, addend: 0x0, symName: _DeleteCities, symObjAddr: 0xA50, symBinAddr: 0x100003D00, symSize: 0x64 }
+  - { offset: 0x47E, size: 0x8, addend: 0x0, symName: _DeleteCountries, symObjAddr: 0xAB4, symBinAddr: 0x100003D64, symSize: 0x68 }
+...

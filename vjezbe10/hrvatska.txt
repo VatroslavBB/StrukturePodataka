@@ -1,6 +1,6 @@
 Split, 160000
 Rijeka, 100000
-Slavonski Broj, 50000
+Sibenik, 50000
 Karlovac, 50000
 Zagreb, 750000
 Zadar, 70000

@@ -32,17 +32,21 @@ Tposition CreateCity(char*, int);
 int LinkCity(Tposition, Tposition);
 int DeleteCities(Tposition);
 int InorderLinkCities(Tposition, Tposition);
+int InorderPrint(Tposition);
+int PrintBiggerThan(Tposition, int);
 
 typedef struct country* Lposition;
 typedef struct country{
     char name[MAX_SIZE];
-    Tposition citiesRoot;
+    City citiesRoot;
     Lposition next;
 }Country;
 
 Lposition CreateCountry(char*);
 int LinkCountry(Lposition, Lposition);
 int DeleteCountries(Lposition);
+int PrintCountries(Lposition);
+Lposition FindCountry(Lposition, char*);
 
 int ReadFromFile(FILE*, Lposition);
 
@@ -50,17 +54,80 @@ int main(){
     Country head = {
         .name = .0,
         .next = NULL,
-        .citiesRoot = NULL
+        .citiesRoot = {
+            .left = NULL,
+            .right = NULL,
+            .name = {0},
+            .population = 0
+        }
     };
-
     FILE* countriesFile = NULL;
     countriesFile = fopen("drzave.txt", "r");
     ReadFromFile(countriesFile, &head);
 
-
     fclose(countriesFile);
 
+    PrintCountries(&head);
+
+    printf("odaberite neku od navedenih drzava\n");
+    int inside = 0;
+    char cntry[MAX_SIZE];
+    scanf("%s", cntry);
+    while(FindCountry(&head, cntry) == NULL){
+        printf("unijeli ste nepostojecu drzavu (prvo slovo treba biti veliko)\n");
+        scanf("%s", cntry);
+    }
+    int pop = 0;
+    printf("sada unesite neku populaciju\n");
+    scanf("%d", &pop);
+    Lposition selectedCountry = FindCountry(&head, cntry);
+    PrintBiggerThan(&selectedCountry->citiesRoot, pop);
+
     return 0;
+}
+
+int PrintBiggerThan(Tposition root, int minPop){
+    if(root == NULL){
+        return EXIT_SUCCESS;
+    }
+    PrintBiggerThan(root->left, minPop);
+    if(root->population >= minPop){
+        printf("%s\n", root->name);
+    }
+    PrintBiggerThan(root->right, minPop);
+    return EXIT_SUCCESS;
+}
+
+Lposition FindCountry(Lposition head, char* cntry){
+    Lposition temp = head->next;
+    while(temp){
+        if(strcmp(temp->name, cntry) == 0){
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+int InorderPrint(Tposition root){
+    if(root == NULL){
+        return EXIT_SUCCESS;
+    }
+    InorderPrint(root->left);
+    printf("%s\n", root->name);
+    InorderPrint(root->right);
+    return EXIT_SUCCESS;
+}
+
+int PrintCountries(Lposition head){
+    Lposition temp = head->next;
+    while(temp){
+        printf("\n%s\n", temp->name);
+        InorderPrint(&temp->citiesRoot);
+        printf("\n");
+        temp = temp->next;
+    }
+    return EXIT_SUCCESS;
 }
 
 Tposition CreateCity(char* name, int pop){
@@ -91,7 +158,7 @@ Lposition CreateCountry(char* name){
         .left = NULL,
         .right = NULL
     };
-    new->citiesRoot = &cRoot;
+    new->citiesRoot = cRoot;
     new->next = NULL;
     return new;
 }
@@ -106,14 +173,18 @@ int LinkCity(Tposition root, Tposition newCity){
             root->right = newCity;
             return EXIT_SUCCESS;
         }
-        return LinkCity(root->right, newCity);
+        else{
+            return LinkCity(root->right, newCity);
+        }
     }
     else if(newCity->population < root->population){
         if(root->left == NULL){
             root->left = newCity;
             return EXIT_SUCCESS;
         }
-        return LinkCity(root->left, newCity);
+        else{
+            return LinkCity(root->left, newCity);
+        }
     }
     else{
         if(strcmp(newCity->name, root->name) > 0){
@@ -121,14 +192,18 @@ int LinkCity(Tposition root, Tposition newCity){
                 root->right = newCity;
                 return EXIT_SUCCESS;
             }
-            return LinkCity(root->right, newCity);
+            else{
+                return LinkCity(root->right, newCity);
+            }
         }
         else if(strcmp(newCity->name, root->name) < 0){
             if(root->left == NULL){
                 root->left = newCity;
                 return EXIT_SUCCESS;
             }
-            return LinkCity(root->left, newCity);
+            else{
+                return LinkCity(root->left, newCity);
+            }
         }
         else{
             free(newCity);
@@ -139,7 +214,7 @@ int LinkCity(Tposition root, Tposition newCity){
 
 int LinkCountry(Lposition head, Lposition newCountry){
     Lposition temp = head;
-    while(temp->next && (strcmp(newCountry->name, temp->next->name) < 0)){
+    while(temp->next && (strcmp(newCountry->name, temp->next->name) > 0)){
         temp = temp->next;
     }
     if(temp->next == NULL){
@@ -147,7 +222,7 @@ int LinkCountry(Lposition head, Lposition newCountry){
         return EXIT_SUCCESS;
     }
     if(strcmp(newCountry->name, temp->name) == 0){
-        InorderLinkCities(newCountry->citiesRoot, temp->citiesRoot);
+        InorderLinkCities(&newCountry->citiesRoot, &temp->citiesRoot);
         return EXIT_SUCCESS;
     }
     newCountry->next = temp->next;
@@ -199,32 +274,25 @@ int ReadFromFile(FILE* file, Lposition head){
     int bytes, population;
     while(fscanf(file, "%s %s", countryName, cityFileName) == 2){
         cityFile = fopen(cityFileName, "r");
+        if(cityFile == NULL){
+            printf("File s drzavom %s nije se mogao otvoriti", countryName);
+            continue;
+        }
         Lposition newCountry = CreateCountry(countryName);
         LinkCountry(head, newCountry);
-        while(fgets(citiesLine, sizeof(citiesLine), cityFile)){
-            char* ptr = citiesLine;
-            bytes = 0;
-            population = 0;
-            memset(cityName, '\0', sizeof(cityName));
-            while(sscanf(ptr, "%s %n", s, &bytes) == 1){
-                strcat(cityName, s);
-                ptr += bytes;
-            }
-            sscanf(ptr, ", %d", &population);
+        while(fscanf(cityFile, "%49[^,], %d", cityName, &population) == 2){
             Tposition newCity = CreateCity(cityName, population);
-            if(newCountry->citiesRoot == NULL){
-                newCountry->citiesRoot = newCity;
+            if(strcmp(newCountry->citiesRoot.name, "") == 0){
+                newCountry->citiesRoot = *newCity;
             }
             else{
-                LinkCity(newCountry->citiesRoot, newCity);
+                LinkCity(&newCountry->citiesRoot, newCity);
             }
         }
         fclose(cityFile);
     }
     return EXIT_SUCCESS;
 }
-
-
 
 
 

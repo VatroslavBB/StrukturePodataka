@@ -1,4 +1,4 @@
-Mexico City, 12200000
+MexicoCity, 12200000
 Monterrey, 1100000
 Puebla, 1400000
 Guadalajara, 1400000
